@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Chase — Follow the Season Across America</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#08101C;--bg1:#0E1825;--bg2:#162232;--bg3:#1C2C3C;
+  --gold:#EDAF48;--gold-dim:rgba(237,175,72,0.11);--gold-border:rgba(237,175,72,0.28);
+  --green:#62C48A;--green-dim:rgba(98,196,138,0.1);
+  --text:#EBE2D4;--text2:#8AA0B2;--text3:#4A5E6E;
+  --bd:rgba(255,255,255,0.065);--bd2:rgba(255,255,255,0.12);
+  --r:16px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:58px;background:rgba(8,16,28,0.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--gold);letter-spacing:0.04em;text-decoration:none}
+.nav-links{display:flex;gap:1.75rem}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:13.5px;font-weight:300;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 5rem;position:relative;overflow:hidden;background-image:radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:28px 28px}
+.hero-glow{position:absolute;bottom:-10%;left:50%;transform:translateX(-50%);width:720px;height:720px;background:radial-gradient(circle,rgba(237,175,72,0.11) 0%,rgba(98,196,138,0.05) 45%,transparent 70%);pointer-events:none;animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.9;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.12)}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:5px 15px;border-radius:100px;margin-bottom:2rem;animation:up .8s ease both}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.2rem,9vw,6.8rem);font-weight:500;font-style:italic;line-height:1.04;letter-spacing:-.02em;margin-bottom:1.6rem;animation:up .8s .12s ease both}
+.hero-title em{color:var(--gold);font-style:italic}
+.hero-sub{max-width:480px;font-size:1.05rem;font-weight:300;color:var(--text2);line-height:1.75;margin-bottom:2.5rem;animation:up .8s .25s ease both}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:#09111E;font-size:13.5px;font-weight:500;letter-spacing:.04em;padding:12px 26px;border-radius:9px;border:none;cursor:pointer;text-decoration:none;transition:opacity .2s,transform .2s;animation:up .8s .38s ease both}
+.hero-cta:hover{opacity:.88;transform:translateY(-2px)}
+.today-card{background:var(--bg1);border:1px solid var(--bd);border-radius:14px;padding:1.25rem 1.5rem;max-width:640px;width:100%;margin:2.5rem auto 0;text-align:left;animation:up .8s .5s ease both}
+.today-lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-weight:500;margin-bottom:10px}
+.today-pills{display:flex;flex-wrap:wrap;gap:6px}
+.t-pill{font-size:12px;font-weight:500;padding:4px 11px;border-radius:100px;display:inline-flex;align-items:center;gap:5px}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.features{padding:5rem 2rem;max-width:960px;margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5px;background:var(--bd);border:1px solid var(--bd);border-radius:18px;overflow:hidden}
+.feat{background:var(--bg1);padding:2rem 1.75rem;transition:background .2s}
+.feat:hover{background:var(--bg2)}
+.feat-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:.06em;margin-bottom:.9rem}
+.feat-title{font-size:.95rem;font-weight:500;margin-bottom:.5rem}
+.feat-body{font-size:13.5px;color:var(--text2);font-weight:300;line-height:1.7}
+.sec{padding:3rem 2rem 5rem;max-width:960px;margin:0 auto;scroll-margin-top:68px}
+.sec-lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-weight:500;margin-bottom:.65rem}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4.5vw,3rem);font-weight:500;font-style:italic;line-height:1.15;margin-bottom:.65rem}
+.sec-sub{font-size:14.5px;color:var(--text2);font-weight:300;max-width:520px;line-height:1.7}
+.divider{height:1px;background:var(--bd);margin:0 2rem}
+.ctrl{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.ctrl-lbl{font-size:11px;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;min-width:40px;font-weight:500}
+.pill{font-size:12px;padding:4px 12px;border-radius:100px;border:1px solid var(--bd2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;line-height:1.5;font-family:'DM Sans',sans-serif}
+.pill:hover{background:var(--bg2);color:var(--text)}
+.s-input{background:var(--bg2);border:1px solid var(--bd2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:6px 12px;border-radius:8px;width:170px;outline:none;transition:border-color .2s}
+.s-input:focus{border-color:rgba(255,255,255,.22)}
+.s-input::placeholder{color:var(--text3)}
+.tl-card{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-top:1.25rem}
+.tl-head{background:var(--bg2);border-bottom:1px solid var(--bd);padding:0 12px 0 0}
+.tl-mo{display:flex;padding:6px 0}
+.tl-scroll{max-height:500px;overflow-y:auto;overflow-x:hidden}
+.tl-scroll::-webkit-scrollbar{width:4px}
+.tl-scroll::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:2px}
+.tl-row{display:flex;align-items:center;min-height:32px;border-bottom:1px solid var(--bd);cursor:default;transition:background .15s;padding-right:12px}
+.tl-row:hover{background:rgba(255,255,255,0.025)}
+.tl-row:last-child{border-bottom:none}
+.tl-row.ref{background:rgba(237,175,72,0.03)}
+.tl-row.ref:hover{background:rgba(237,175,72,0.06)}
+/* PLANNER */
+.plan-card{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r);padding:1.75rem;margin-top:1.5rem}
+.plan-row{display:flex;flex-wrap:wrap;gap:1.5rem;margin-bottom:1.5rem}
+.plan-group{flex:1;min-width:220px}
+.plan-group-lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-weight:500;margin-bottom:9px}
+.plan-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pb{font-size:12.5px;padding:6px 14px;border-radius:8px;border:1px solid var(--bd2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;line-height:1.4}
+.pb:hover{background:var(--bg2);color:var(--text)}
+.date-inp{background:var(--bg2);border:1px solid var(--bd2);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:6px 12px;border-radius:8px;outline:none;transition:border-color .2s;color-scheme:dark;height:36px}
+.date-inp:focus{border-color:rgba(255,255,255,.22)}
+.slider-row{display:flex;align-items:center;gap:12px;margin-top:6px}
+.slider-row input[type=range]{flex:1;accent-color:var(--gold)}
+.len-disp{font-family:'DM Mono',monospace;font-size:13px;color:var(--gold);min-width:72px;text-align:right}
+.plan-summary{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:.85rem 1.1rem;margin-bottom:1.25rem;font-size:13.5px;color:var(--text2);display:flex;flex-wrap:wrap;gap:8px;align-items:center;line-height:1.6}
+/* MAP */
+.map-wrap{position:relative;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);overflow:visible;margin-bottom:1.25rem}
+.map-wrap svg{width:100%;height:auto;display:block;border-radius:var(--r)}
+.map-tip{position:fixed;pointer-events:none;background:#0D1B2Af5;border:1px solid var(--bd2);border-radius:11px;padding:11px 15px;font-size:12px;color:var(--text);opacity:0;transition:opacity .12s;z-index:999;min-width:210px;max-width:260px}
+.map-tip strong{font-size:13px;display:block;margin-bottom:2px}
+.tip-cities{margin-top:7px;border-top:1px solid var(--bd);padding-top:6px}
+.tip-city-row{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;padding:1.5px 0;gap:8px}
+.map-loading{display:flex;align-items:center;justify-content:center;height:280px;color:var(--text3);font-size:13px;gap:10px}
+.map-legend{display:flex;flex-wrap:wrap;gap:10px;padding:.7rem 1rem;background:var(--bg1);border:1px solid var(--bd);border-top:none;border-bottom-left-radius:var(--r);border-bottom-right-radius:var(--r)}
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:8px}
+.mc{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:.75rem 1rem;transition:background .15s}
+.mc:hover{background:var(--bg3)}
+.no-match{text-align:center;padding:2rem 0;color:var(--text3);font-size:13.5px}
+/* FAQ */
+.faq-item{border-bottom:1px solid var(--bd)}
+.faq-item:last-child{border-bottom:none}
+.faq-q{width:100%;background:none;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;text-align:left;padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;line-height:1.5;transition:color .15s}
+.faq-q:hover{color:var(--gold)}
+.faq-q .chevron{flex-shrink:0;width:16px;height:16px;position:relative;transition:transform .25s}
+.faq-q .chevron::before,.faq-q .chevron::after{content:'';position:absolute;background:currentColor;border-radius:2px;transition:all .25s}
+.faq-q .chevron::before{width:8px;height:1.5px;top:7px;left:0}
+.faq-q .chevron::after{width:8px;height:1.5px;top:7px;left:8px}
+.faq-item.open .faq-q .chevron::before{transform:rotate(45deg) translate(0,0)}
+.faq-item.open .faq-q .chevron::after{transform:rotate(-45deg) translate(-1px,1px)}
+.faq-q .ch-v{color:var(--text3);font-size:18px;line-height:1;transition:transform .25s;transform-origin:center}
+.faq-item.open .ch-v{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .32s ease}
+.faq-a-inner{padding:0 0 14px;font-size:13.5px;color:var(--text2);font-weight:300;line-height:1.8}
+.faq-a-inner p{margin-bottom:.6rem}
+.faq-a-inner p:last-child{margin-bottom:0}
+.faq-a-inner strong{color:var(--text);font-weight:500}
+.faq-a-inner code{font-family:'DM Mono',monospace;font-size:12px;background:var(--bg3);padding:1px 6px;border-radius:4px;color:var(--text2)}
+.faq-cat{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-weight:500;margin:1.5rem 0 .25rem}
+.faq-cat:first-child{margin-top:0}
+
+footer{border-top:1px solid var(--bd);padding:2.5rem 2rem;text-align:center;color:var(--text3);font-size:12.5px;font-weight:300;line-height:1.8}
+footer strong{color:var(--text2);font-weight:400}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:599px){
+  nav{padding:0 1.2rem}
+  .nav-links{gap:1rem}
+  .nav-links a{font-size:12px}
+  .sec{padding:2rem 1rem 3.5rem}
+  .divider{margin:0 1rem}
+  .features{padding:3rem 1rem}
+  .plan-card{padding:1.2rem 1rem}
+  .tl-scroll{max-height:420px}
+  .plan-group{min-width:100%}
+  .tl-row-mobile{display:flex;flex-direction:column;padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .15s}
+  .tl-row-mobile:hover{background:rgba(255,255,255,0.025)}
+  .tl-row-mobile:last-child{border-bottom:none}
+  .tl-row-mobile.ref{background:rgba(237,175,72,0.03)}
+  .tl-row-mobile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+  .tl-row-mobile-bar{position:relative;height:18px;width:100%;border-radius:4px;overflow:hidden;background:rgba(255,255,255,0.04)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">Spring Chase</a>
+  <div class="nav-links">
+    <a href="#tool">Explore Windows</a>
+    <a href="#planner">Plan My Trip</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">
+    <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;animation:breathe 2s ease-in-out infinite"></span>
+    Travel Planning Tool
+  </div>
+  <h1 class="hero-title">Every state<br>has its <em>moment.</em></h1>
+  <p class="hero-sub">Find the 30-day window when any US state reaches perfect spring conditions — highs under 85°F, crisp nights in the 50s — and build a route that follows the season north.</p>
+  <a href="#tool" class="hero-cta">Explore all 50 states ↓</a>
+  <div class="today-card">
+    <div class="today-lbl" id="today-lbl">Loading today's conditions…</div>
+    <div class="today-pills" id="today-pills"></div>
+  </div>
+</section>
+
+<div class="features">
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-num">01</div><div class="feat-title">The sweet spot</div><div class="feat-body">Daytime highs up to 85°F. Nights cooling into the 50s. That perfect balance of warmth and freshness that makes travel feel alive.</div></div>
+    <div class="feat"><div class="feat-num">02</div><div class="feat-title">4-city averages</div><div class="feat-body">Each state's window is computed from four cities across different regions of that state, then averaged — so you see the whole picture, not just one city.</div></div>
+    <div class="feat"><div class="feat-num">03</div><div class="feat-title">Map your trip</div><div class="feat-body">Set your start date and trip length. Every state at peak spring conditions during your window lights up on the interactive map.</div></div>
+    <div class="feat"><div class="feat-num">04</div><div class="feat-title">See what's peak now</div><div class="feat-body">The live banner at the top shows exactly which states are in their sweet spot today, updated based on your visit date.</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<section class="sec" id="tool">
+  <div class="sec-lbl">Climate Windows</div>
+  <h2 class="sec-title">When spring arrives,<br>state by state</h2>
+  <p class="sec-sub">Windows averaged from 4 cities per state using 30-year NOAA climate normals. Amber line marks today. Hover any row to see the city breakdown.</p>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:2rem;margin-bottom:.75rem">
+    <input class="s-input" type="text" id="srch" placeholder="🔍  Search state…" oninput="renderTL()">
+  </div>
+  <div class="ctrl">
+    <span class="ctrl-lbl">Region</span>
+    <button class="pill" id="r-all" onclick="setR('all')">All</button>
+    <button class="pill" id="r-Southeast" onclick="setR('Southeast')">Southeast</button>
+    <button class="pill" id="r-Northeast" onclick="setR('Northeast')">Northeast</button>
+    <button class="pill" id="r-Midwest" onclick="setR('Midwest')">Midwest</button>
+    <button class="pill" id="r-South" onclick="setR('South')">South</button>
+    <button class="pill" id="r-Mountain" onclick="setR('Mountain')">Mountain West</button>
+    <button class="pill" id="r-Pacific" onclick="setR('Pacific')">Pacific</button>
+  </div>
+  <div class="ctrl" style="margin-bottom:0">
+    <span class="ctrl-lbl">Sort</span>
+    <button class="pill" id="s-date" onclick="setS('date')">By window date</button>
+    <button class="pill" id="s-alpha" onclick="setS('alpha')">A – Z</button>
+    <button class="pill" id="s-region" onclick="setS('region')">By region</button>
+  </div>
+  <div class="tl-card">
+    <div class="tl-head"><div class="tl-mo" id="mo-hd"></div></div>
+    <div class="tl-scroll" id="tl-body"></div>
+  </div>
+  <div id="legend" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px"></div>
+  <div style="margin-top:8px;font-size:11px;color:var(--text3);line-height:1.7">
+    ★ = North Carolina reference &nbsp;·&nbsp; ⚠ = lows criterion may differ &nbsp;·&nbsp; Bars = averaged 30-day window &nbsp;·&nbsp; Hover for city detail
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="sec" id="planner" style="padding-top:2.5rem">
+  <div class="sec-lbl">Route Planner</div>
+  <h2 class="sec-title">Find your spring overlap</h2>
+  <p class="sec-sub">Set when you're traveling and for how long. Every state at peak spring conditions during your window lights up on the map.</p>
+
+  <div class="plan-card">
+    <div class="plan-row">
+      <div class="plan-group">
+        <div class="plan-group-lbl">Start date</div>
+        <div class="plan-btns">
+          <button class="pb" id="pb-today" onclick="setPStart('today')">Today</button>
+          <button class="pb" id="pb-weekend" onclick="setPStart('weekend')">This weekend</button>
+        </div>
+        <input type="date" class="date-inp" id="custom-date" onchange="setPStart('custom')">
+      </div>
+      <div class="plan-group">
+        <div class="plan-group-lbl">Trip length</div>
+        <div class="plan-btns">
+          <button class="pb" id="pl-3" onclick="setPLen(3)">3 days</button>
+          <button class="pb" id="pl-7" onclick="setPLen(7)">1 week</button>
+          <button class="pb" id="pl-14" onclick="setPLen(14)">2 weeks</button>
+          <button class="pb" id="pl-30" onclick="setPLen(30)">1 month</button>
+          <button class="pb" id="pl-60" onclick="setPLen(60)">2 months</button>
+        </div>
+        <div class="slider-row">
+          <input type="range" id="len-slider" min="1" max="120" step="1" value="14" oninput="onSlider(this.value)">
+          <span class="len-disp" id="len-val">14 days</span>
+        </div>
+      </div>
+    </div>
+    <div class="plan-summary" id="plan-summary">Calculating…</div>
+    <div class="map-wrap" id="map-wrap">
+      <div class="map-loading" id="map-loading">
+        <span style="width:14px;height:14px;border:2px solid var(--gold);border-top-color:transparent;border-radius:50%;display:inline-block;animation:spin .7s linear infinite"></span>
+        Loading US map…
+      </div>
+    </div>
+    <div class="map-legend" id="map-legend" style="display:none"></div>
+    <div style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);font-weight:500;margin:1.25rem 0 9px" id="match-title"></div>
+    <div id="match-list"></div>
+  </div>
+</section>
+
+<div class="map-tip" id="map-tip"></div>
+
+<div class="divider"></div>
+
+<section class="sec" id="faq" style="padding-top:2.5rem;max-width:720px">
+  <div class="sec-lbl">FAQ</div>
+  <h2 class="sec-title">Common questions</h2>
+  <p class="sec-sub" style="margin-bottom:2rem">Everything you need to know about the data, the tool, and how to plan a trip with it.</p>
+
+  <div style="background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r);padding:0 1.5rem">
+
+    <div class="faq-cat" style="padding-top:1.25rem">About the website</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What is Spring Chase and who is it for?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>Spring Chase is a free travel planning tool that helps you find the ideal time to visit any US state based on weather conditions. The target conditions — <strong>daytime highs up to 85°F with overnight lows in the 50s</strong> — were chosen to match what April in North Carolina feels like: warm but not oppressive, with crisp evenings perfect for being outdoors.</p>
+        <p>It's designed for anyone who travels with the weather in mind — motorcycle riders, road-trippers, hikers, campers, RV travelers, or anyone who'd rather not show up somewhere two weeks too early or too late in the season.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What does "spring window" actually mean?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>Each state's spring window is the approximate 30-day period when average daytime highs are at or below 85°F and average nighttime lows are in the 50s°F — the sweet spot before summer heat sets in. The window represents the <strong>start and end of that comfortable shoulder season</strong>, not a guarantee that every single day will hit those numbers.</p>
+        <p>Some states have a narrow window (Arizona's desert climbs quickly), while others hold comfortable conditions for longer (Pacific Northwest). The 30-day duration is a standardized estimate for comparison.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-cat">Methodology &amp; data</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Where does the data come from?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>Windows are derived from <strong>NOAA 30-year Climate Normals (1991–2020)</strong>, which represent long-term monthly temperature averages for hundreds of US weather stations. These normals are published by the National Oceanic and Atmospheric Administration and are the standard reference used by meteorologists for climatological comparisons.</p>
+        <p>The data represents typical conditions over three decades — not a specific year's forecast, and not real-time weather. Think of it as a reliable baseline for what a given location feels like in a given month, averaged over a generation of measurements.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Why 4 cities per state? How were they chosen?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>Using a single city per state can be misleading — Washington state's Seattle (coastal, mild) and Spokane (inland, continental) differ by nearly three weeks in their spring window. To capture this variation, <strong>four cities were selected per state to represent geographic spread</strong>: typically one each from the north, south, east, and west of the state, or from distinct climate zones (e.g. valley vs. mountain, coastal vs. inland).</p>
+        <p>The four city windows are then averaged to produce a single representative state window. You can see all four individual city windows in the tooltip when you hover over any state on the map or any row in the timeline.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How accurate are the windows? Can I trust them for trip planning?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>The windows are <strong>accurate for general macro planning</strong> — they reliably tell you which month and approximate week a state hits peak spring conditions in an average year. They are not forecasts and will not tell you what next Tuesday will feel like.</p>
+        <p>Year-to-year variation is real: a given state's window might shift 1–3 weeks earlier or later in any specific year due to La Niña, El Niño, or other patterns. Always check actual forecasts (Weather.gov, Weather Underground, Windy) in the week before departure. Use Spring Chase to decide <em>when</em> to plan; use a live forecast to confirm the specific days.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-cat">How to navigate</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How do I use the timeline in the "Explore Windows" section?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>The timeline shows all 50 states as horizontal bars against a full-year calendar. <strong>Each bar represents that state's 30-day spring window.</strong> The thin amber vertical line marks today's date.</p>
+        <p>Use the <strong>Region filter</strong> to narrow down to a part of the country, or <strong>Sort</strong> to reorder by date, alphabetically, or by region. The search box lets you jump to a specific state. Hover any row to see the 4-city breakdown behind that state's averaged window. States with a <strong>NOW</strong> badge are currently in their peak window.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How does the interactive map work?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>The map in the Route Planner section updates in real time as you adjust your <strong>start date and trip length</strong>. States that have any overlap with your travel window light up in their region color; states outside your window dim to near-black.</p>
+        <p>Hover any state to see a tooltip with the state's averaged spring window, how many days of overlap it has with your trip, and the individual city breakdown. On mobile, tap a state to trigger the tooltip — it will disappear after a few seconds.</p>
+        <p>Alaska and Hawaii are positioned in their conventional map locations in the bottom-left corner.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-cat">Planning trips — motorcycle &amp; car</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How would a motorcycle rider use this to plan a multi-week route?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p><strong>Example — 4-week spring chase from the South to the Rockies:</strong> Set your start date to <code>April 1</code> and trip length to <code>30 days</code>. The map will highlight the Southeast, mid-Atlantic, Midwest, and lower Mountain West states all simultaneously in window. This gives you a menu of states to string together into a route heading north or northwest.</p>
+        <p>A practical loop might be: <em>NC → Virginia → West Virginia → Kentucky → Missouri → Kansas → Colorado</em> — all of which hit their spring windows within that stretch. By the time you reach Denver in late April, you're catching the tail of its comfortable window before summer dryness sets in.</p>
+        <p>Pro tip: set trip length to <code>60–90 days</code> to see the full northward migration and plan a season-long tour that stays in spring the entire time.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How would a car road-tripper use this for a family vacation?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p><strong>Example — 2-week national parks run in May:</strong> Set start date to <code>May 10</code> and trip length to <code>14 days</code>. You'll see Utah, Colorado, Idaho, and the Pacific Northwest lighting up — perfect timing for Arches, Capitol Reef, or a Cascades loop without summer crowds or desert heat.</p>
+        <p>For a <strong>Southern fall alternative</strong> (if you missed spring), flip the logic: the Southeast states hit spring-like temperatures again in October–November on their way back down. The tool currently maps spring entry; the same data can inform fall planning by looking at the end of the warm season rather than the start.</p>
+        <p>Car travelers can use the <strong>overlap percentage bar</strong> in each state card to prioritize stops — a state with 90% overlap means almost your entire visit lands in peak conditions.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-cat">Caveats &amp; things to watch out for</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What are the main limitations of this tool?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p><strong>It's averages, not forecasts.</strong> A state can be "in window" per the data and still have a cold snap, rain system, or late frost. Always verify with a live weather service before committing to a departure.</p>
+        <p><strong>Elevation matters enormously</strong> and is only partially captured by the 4-city sampling. A mountain pass in Colorado or a high-elevation meadow in the Sierras may be 2–4 weeks behind the city averages — or closed entirely. Check road conditions separately for high-elevation routes.</p>
+        <p><strong>Hawaii's lows don't quite hit the 50s</strong> at sea level — overnight temps tend to stay in the mid-60s year-round. It's flagged with ⚠ in the data. Similarly, Alaska's interior (Fairbanks) approaches but doesn't reliably reach 50°F overnight in the summer window shown.</p>
+        <p><strong>Climate change is shifting these windows.</strong> The NOAA 1991–2020 normals are the most current published dataset, but observed windows are already trending 1–2 weeks earlier in many states compared to older normals.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-item" style="border-bottom:none">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Why does my state's window feel off compared to my experience?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>The windows represent <strong>averaged statewide conditions</strong> across 4 cities — your local area may peak earlier or later depending on your specific elevation, distance from coast, or urban heat island effect. A cyclist in coastal San Diego will experience spring 6+ weeks before someone in the Sierra foothills of the same state.</p>
+        <p>If your local experience consistently diverges from the mapped window, trust your experience for local trips. The tool is most useful for <em>planning travel to unfamiliar states</em> where you don't have that local intuition yet.</p>
+        <p>Feedback on specific windows that seem off is always welcome — hover the tooltip to see which 4 cities were sampled, and if the selection seems unrepresentative for your region, that's useful signal.</p>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Windows computed from <strong>4-city NOAA 30-year climate normal averages</strong> per state.</div>
+  <div>Elevation, coastal proximity, and sub-regional variation still apply within each state.</div>
+  <div style="margin-top:.35rem;font-size:11px;opacity:.6">Always verify current forecasts before travel. Spring Chase is a planning aid, not a weather guarantee.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+/*
+  Data structure per state:
+  [fullName, abbr, region, avgStartDoy, flag, [[city, startDoy], ...4 cities]]
+
+  avgStartDoy = Math.round(average of 4 city startDoys)
+  startDoy = first day-of-year of the 30-day spring window
+    (when avg high ≤85°F AND avg low ~50-59°F)
+  Based on NOAA 30-year climate normals (1991-2020).
+  flag: '' | '⚠' (lows caveat) | '★' (reference)
+*/
+const S=[
+  // name, abbr, region, avgDoy, flag, [[city,doy],...]
+  ['Alabama','AL','Southeast',71,'',[['Birmingham',74],['Huntsville',79],['Mobile',60],['Montgomery',69]]],
+  ['Alaska','AK','Pacific',152,'⚠',[['Fairbanks',166],['Anchorage',145],['Juneau',140],['Kodiak',155]]],
+  ['Arizona','AZ','Mountain',64,'',[['Phoenix',46],['Tucson',55],['Flagstaff',121],['Yuma',32]]],
+  ['Arkansas','AR','South',82,'',[['Little Rock',79],['Fort Smith',81],['Fayetteville',91],['Jonesboro',79]]],
+  ['California','CA','Pacific',70,'',[['Sacramento',79],['San Diego',46],['San Francisco',105],['Los Angeles',51]]],
+  ['Colorado','CO','Mountain',124,'',[['Denver',135],['Colorado Springs',130],['Grand Junction',110],['Pueblo',121]]],
+  ['Connecticut','CT','Northeast',118,'',[['Hartford',121],['New Haven',115],['Bridgeport',112],['Waterbury',125]]],
+  ['Delaware','DE','Northeast',101,'',[['Wilmington',105],['Dover',100],['Georgetown',97],['Newark DE',100]]],
+  ['Florida','FL','South',53,'',[['Jacksonville',60],['Orlando',46],['Tampa',46],['Pensacola',64]]],
+  ['Georgia','GA','Southeast',69,'',[['Atlanta',74],['Savannah',64],['Macon',69],['Augusta',69]]],
+  ['Hawaii','HI','Pacific',60,'⚠',[['Honolulu',46],['Hilo',55],['Kahului',55],['Lihue',60]]],
+  ['Idaho','ID','Mountain',124,'',[['Boise',121],['Idaho Falls',135],['Lewiston',115],['Twin Falls',125]]],
+  ['Illinois','IL','Midwest',111,'',[['Chicago',115],['Springfield',105],['Peoria',110],['Rockford',115]]],
+  ['Indiana','IN','Midwest',106,'',[['Indianapolis',105],['Fort Wayne',110],['Evansville',97],['South Bend',112]]],
+  ['Iowa','IA','Midwest',112,'',[['Des Moines',110],['Cedar Rapids',112],['Sioux City',112],['Dubuque',115]]],
+  ['Kansas','KS','Midwest',99,'',[['Wichita',97],['Topeka',100],['Kansas City KS',100],['Dodge City',97]]],
+  ['Kentucky','KY','Southeast',97,'',[['Louisville',100],['Lexington',100],['Bowling Green',97],['Paducah',91]]],
+  ['Louisiana','LA','South',67,'',[['New Orleans',64],['Baton Rouge',64],['Shreveport',74],['Lafayette',64]]],
+  ['Maine','ME','Northeast',140,'',[['Portland ME',135],['Bangor',140],['Augusta ME',135],['Caribou',148]]],
+  ['Maryland','MD','Northeast',105,'',[['Baltimore',105],['Annapolis',103],['Hagerstown',107],['Ocean City MD',105]]],
+  ['Massachusetts','MA','Northeast',121,'',[['Boston',121],['Worcester',125],['Springfield MA',118],['New Bedford',118]]],
+  ['Michigan','MI','Midwest',124,'',[['Detroit',118],['Grand Rapids',121],['Flint',121],['Marquette',135]]],
+  ['Minnesota','MN','Midwest',130,'',[['Minneapolis',125],['Duluth',135],['Rochester MN',128],['St. Cloud',130]]],
+  ['Mississippi','MS','South',67,'',[['Jackson MS',69],['Biloxi',60],['Tupelo',74],['Hattiesburg',64]]],
+  ['Missouri','MO','Midwest',99,'',[['St. Louis',100],['Kansas City MO',97],['Springfield MO',97],['Columbia MO',100]]],
+  ['Montana','MT','Mountain',149,'',[['Billings',148],['Great Falls',152],['Missoula',145],['Helena MT',152]]],
+  ['Nebraska','NE','Midwest',111,'',[['Omaha',110],['Lincoln NE',110],['North Platte',112],['Grand Island NE',112]]],
+  ['Nevada','NV','Mountain',88,'',[['Las Vegas',69],['Reno',100],['Elko',115],['Henderson NV',69]]],
+  ['New Hampshire','NH','Northeast',132,'',[['Concord NH',132],['Manchester NH',128],['Portsmouth NH',128],['Berlin NH',140]]],
+  ['New Jersey','NJ','Northeast',107,'',[['Trenton',107],['Newark NJ',110],['Atlantic City',107],['Cape May',105]]],
+  ['New Mexico','NM','Mountain',89,'',[['Albuquerque',91],['Santa Fe',100],['Las Cruces',79],['Roswell',86]]],
+  ['New York','NY','Northeast',120,'',[['New York City',115],['Buffalo',121],['Albany NY',121],['Syracuse NY',121]]],
+  ['North Carolina','NC','Southeast',90,'★',[['Charlotte',91],['Raleigh',88],['Asheville',100],['Wilmington NC',82]]],
+  ['North Dakota','ND','Midwest',132,'',[['Bismarck',132],['Fargo',130],['Grand Forks',130],['Minot',135]]],
+  ['Ohio','OH','Midwest',111,'',[['Columbus OH',110],['Cleveland',115],['Cincinnati',105],['Toledo',112]]],
+  ['Oklahoma','OK','South',90,'',[['Oklahoma City',91],['Tulsa',88],['Lawton',88],['Enid',91]]],
+  ['Oregon','OR','Pacific',119,'',[['Portland OR',125],['Eugene',125],['Medford',112],['Pendleton',115]]],
+  ['Pennsylvania','PA','Northeast',108,'',[['Philadelphia',105],['Pittsburgh',110],['Harrisburg',105],['Scranton',112]]],
+  ['Rhode Island','RI','Northeast',117,'',[['Providence',118],['Newport RI',115],['Woonsocket',120],['Westerly',115]]],
+  ['South Carolina','SC','Southeast',78,'',[['Columbia SC',79],['Charleston SC',74],['Greenville SC',82],['Myrtle Beach',78]]],
+  ['South Dakota','SD','Midwest',124,'',[['Sioux Falls',125],['Rapid City',121],['Aberdeen SD',128],['Pierre SD',121]]],
+  ['Tennessee','TN','Southeast',88,'',[['Nashville',91],['Memphis',82],['Knoxville',91],['Chattanooga',86]]],
+  ['Texas','TX','South',73,'',[['Dallas',74],['Houston',64],['San Antonio',64],['Amarillo',88]]],
+  ['Utah','UT','Mountain',105,'',[['Salt Lake City',107],['Provo',107],['St. George UT',91],['Logan UT',115]]],
+  ['Vermont','VT','Northeast',134,'',[['Burlington VT',132],['Montpelier',135],['St. Johnsbury',138],['Rutland VT',132]]],
+  ['Virginia','VA','Southeast',98,'',[['Richmond VA',97],['Norfolk VA',94],['Roanoke',100],['Lynchburg',100]]],
+  ['Washington','WA','Pacific',137,'',[['Seattle',145],['Spokane',130],['Yakima',125],['Olympia',148]]],
+  ['West Virginia','WV','Southeast',104,'',[['Charleston WV',100],['Huntington WV',97],['Morgantown',107],['Lewisburg WV',110]]],
+  ['Wisconsin','WI','Midwest',127,'',[['Milwaukee',125],['Madison WI',125],['Green Bay',128],['Wausau',130]]],
+  ['Wyoming','WY','Mountain',143,'',[['Cheyenne',145],['Casper',140],['Laramie',148],['Sheridan WY',140]]],
+];
+
+const RC={Southeast:'#2DD4A4',Northeast:'#5AABF0',Midwest:'#F0B444',South:'#F07A44',Mountain:'#A898F8',Pacific:'#7ED46A'};
+const MOS=['J','F','M','A','M','J','J','A','S','O','N','D'];
+const BW=336,NW=164,DW=110;
+
+function fmt(d){const dt=new Date(2025,0,d);return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function doy(){const n=new Date(),s=new Date(n.getFullYear(),0,0);return Math.floor((n-s)/864e5);}
+function dateToDoy(d){const s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/864e5);}
+function isMobile(){return window.innerWidth<600;}
+function fmtLen(d){if(d===1)return'1 day';if(d===7)return'1 week';if(d===14)return'2 weeks';if(d===30)return'1 month';if(d===60)return'2 months';return d+' days';}
+
+let reg='all',srt='date';
+let pStart=doy(),pLen=14,pMode='today';
+let usTopo=null,mapSvg=null,mapPath=null,stateByName=null;
+
+// Build lookup by name
+function buildLookup(){stateByName=new Map(S.map(s=>[s[0],s]));}
+
+/* TODAY BANNER */
+function buildToday(){
+  const t=doy();
+  const active=S.filter(([,,,sd])=>t>=sd&&t<=sd+30);
+  const dateStr=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('today-lbl').textContent=active.length>0
+    ?`${dateStr} — ${active.length} state${active.length>1?'s are':' is'} at peak spring conditions right now:`
+    :`${dateStr} — no states are at peak spring conditions today.`;
+  if(!active.length){
+    document.getElementById('today-pills').innerHTML='<span style="font-size:13px;color:var(--text3)">Try the planner below to find the nearest upcoming window.</span>';
+    return;
+  }
+  document.getElementById('today-pills').innerHTML=active.map(([name,,region,,flag])=>{
+    const c=RC[region],ref=flag==='★';
+    const bg=ref?'rgba(237,175,72,0.12)':'rgba(255,255,255,0.045)',bc=ref?'rgba(237,175,72,0.3)':'rgba(255,255,255,0.1)',tc=ref?'var(--gold)':c;
+    return `<span class="t-pill" style="background:${bg};border:1px solid ${bc};color:${tc}"><span style="width:5px;height:5px;border-radius:50%;background:${tc};display:inline-block"></span>${name}${ref?' ★':''}</span>`;
+  }).join('');
+}
+
+/* BUTTON HELPERS */
+function actBtns(pfx,val,cfn){
+  document.querySelectorAll(`[id^="${pfx}"]`).forEach(el=>{
+    const on=el.id===pfx+val;
+    el.style.background=on?cfn(val):'';el.style.color=on?'#08101C':'';el.style.borderColor=on?'transparent':'';
+  });
+}
+function setR(r){reg=r;actBtns('r-',r,v=>v==='all'?'#8AA0B2':RC[v]);renderTL();}
+function setS(s){srt=s;actBtns('s-',s,()=>'#8AA0B2');renderTL();}
+
+/* MONTH HEADER */
+function buildHeader(){
+  const moEl=document.getElementById('mo-hd');
+  if(isMobile()){
+    moEl.style.marginLeft='0';
+    moEl.innerHTML=MOS.map(m=>`<div style="width:${(100/12).toFixed(2)}%;text-align:center;font-size:9px;color:var(--text3)">${m}</div>`).join('');
+  } else {
+    moEl.style.marginLeft=NW+'px';
+    moEl.innerHTML=MOS.map(m=>`<div style="width:${(BW/12).toFixed(1)}px;text-align:center;font-size:9.5px;color:var(--text3)">${m}</div>`).join('');
+  }
+}
+
+/* RICH TOOLTIP HTML for timeline + map */
+function tipHtml(st, matchStart, matchEnd){
+  const [name,,region,avgDoy,flag,cities]=st;
+  const c=RC[region];
+  const inTrip=matchStart!=null;
+  const ov=inTrip?Math.min(avgDoy+30,matchEnd)-Math.max(avgDoy,matchStart)+1:0;
+  let html=`<strong>${name}${flag?' '+flag:''}</strong>
+    <div style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:${c};margin-bottom:5px">${region}</div>
+    <div style="font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-bottom:1px">Avg window: ${fmt(avgDoy)} – ${fmt(avgDoy+30)}</div>`;
+  if(inTrip){
+    html+=ov>0
+      ?`<div style="font-size:11px;color:${c};font-weight:500;margin-bottom:4px">✓ ${ov} day${ov!==1?'s':''} overlap with your trip</div>`
+      :`<div style="font-size:11px;color:var(--text3);margin-bottom:4px">Outside your trip window</div>`;
+  }
+  html+=`<div class="tip-cities"><div style="font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:4px">4-city sample</div>`;
+  cities.forEach(([city,sd])=>{
+    html+=`<div class="tip-city-row"><span style="color:var(--text2)">${city}</span><span style="color:var(--text3);font-family:'DM Mono',monospace">${fmt(sd)} – ${fmt(sd+30)}</span></div>`;
+  });
+  html+='</div>';
+  return html;
+}
+
+/* TIMELINE RENDER */
+function renderTL(){
+  const q=(document.getElementById('srch').value||'').toLowerCase();
+  let list=S.filter(s=>(reg==='all'||s[2]===reg)&&(!q||s[0].toLowerCase().includes(q)));
+  if(srt==='date')list.sort((a,b)=>a[3]-b[3]);
+  else if(srt==='alpha')list.sort((a,b)=>a[0].localeCompare(b[0]));
+  else list.sort((a,b)=>a[2].localeCompare(b[2])||a[3]-b[3]);
+
+  const t=doy(),mobile=isMobile();
+  const tip=document.getElementById('map-tip');
+
+  if(mobile){
+    document.getElementById('tl-body').innerHTML=list.map(st=>{
+      const [name,abbr,region,sd,flag]=st;
+      const c=RC[region],isRef=flag==='★',inWin=t>=sd&&t<=sd+30;
+      const bl=((sd-1)/365*100).toFixed(2),bw=(30/365*100).toFixed(2);
+      const glow=inWin?`box-shadow:0 0 8px ${c}66`:'';
+      const nowBadge=inWin?`<span style="font-size:8.5px;background:rgba(98,196,138,0.14);color:var(--green);border:1px solid rgba(98,196,138,0.28);border-radius:4px;padding:1px 5px;font-family:'DM Mono',monospace;white-space:nowrap">NOW</span>`:'';
+      const todayLine=t>0&&t<366?`<div style="position:absolute;left:${((t-1)/365*100).toFixed(2)}%;top:0;bottom:0;width:1.5px;background:rgba(237,175,72,0.55);z-index:2"></div>`:'';
+      return `<div class="tl-row-mobile${isRef?' ref':''}">
+        <div class="tl-row-mobile-top">
+          <div style="display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden">
+            <span style="width:6px;height:6px;min-width:6px;border-radius:50%;background:${c};flex-shrink:0;display:inline-block"></span>
+            <span style="font-size:13px;color:var(--text);font-weight:${isRef?500:400};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}${isRef?' ★':''}</span>
+            ${nowBadge}
+          </div>
+          <span style="font-size:10.5px;color:var(--text2);font-family:'DM Mono',monospace;white-space:nowrap;margin-left:8px;flex-shrink:0">${fmt(sd)} – ${fmt(sd+30)}</span>
+        </div>
+        <div class="tl-row-mobile-bar">${todayLine}<div style="position:absolute;left:${bl}%;width:${bw}%;top:2px;bottom:2px;background:${c};border-radius:3px;${glow};opacity:${isRef?1:.78}"></div></div>
+      </div>`;
+    }).join('');
+  } else {
+    document.getElementById('tl-body').innerHTML=list.map(st=>{
+      const [name,abbr,region,sd,flag]=st;
+      const c=RC[region],bl=((sd-1)/365*BW).toFixed(2),bw=(30/365*BW).toFixed(2);
+      const isRef=flag==='★',inWin=t>=sd&&t<=sd+30;
+      const glow=inWin?`box-shadow:0 0 10px ${c}55;opacity:1`:`opacity:${isRef?1:.72}`;
+      const now=inWin?`<span style="font-size:9px;background:rgba(98,196,138,0.14);color:var(--green);border:1px solid rgba(98,196,138,0.28);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle;font-family:'DM Mono',monospace">NOW</span>`:'';
+      return `<div class="tl-row${isRef?' ref':''}"
+          onmouseenter="showTip(event,${S.indexOf(st)},null,null)"
+          onmousemove="moveTip(event)"
+          onmouseleave="hideTip()">
+        <div style="width:${NW}px;min-width:${NW}px;padding:0 10px;display:flex;align-items:center;gap:7px;overflow:hidden">
+          <span style="width:6px;height:6px;min-width:6px;border-radius:50%;background:${c};flex-shrink:0;display:inline-block"></span>
+          <span style="font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${isRef?500:400}">${name}${isRef?' ★':''}${now}</span>
+        </div>
+        <div style="width:${BW}px;min-width:${BW}px;position:relative;height:32px">
+          ${Array.from({length:11},(_,i)=>`<div style="position:absolute;left:${((i+1)/12*BW).toFixed(1)}px;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.035)"></div>`).join('')}
+          ${t>0&&t<366?`<div style="position:absolute;left:${((t-1)/365*BW).toFixed(1)}px;top:0;bottom:0;width:1px;background:rgba(237,175,72,0.38);z-index:2"></div>`:''}
+          <div style="position:absolute;left:${bl}px;width:${bw}px;top:7px;bottom:7px;background:${c};border-radius:4px;${glow}"></div>
+        </div>
+        <div style="min-width:${DW}px;padding:0 0 0 10px;font-size:11px;color:var(--text2);white-space:nowrap;font-family:'DM Mono',monospace">${fmt(sd)} – ${fmt(sd+30)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  const shown=[...new Set(list.map(s=>s[2]))].sort();
+  document.getElementById('legend').innerHTML=shown.map(r=>`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:7px;height:7px;border-radius:50%;background:${RC[r]};display:inline-block"></span>${r}</span>`).join('');
+}
+
+/* TOOLTIP HANDLERS */
+function showTip(event,idx,ms,me){
+  const t=document.getElementById('map-tip');
+  t.innerHTML=tipHtml(S[idx],ms,me);
+  t.style.left=(event.clientX+16)+'px';
+  t.style.top=(event.clientY-10)+'px';
+  t.style.opacity='1';
+}
+function moveTip(event){
+  const t=document.getElementById('map-tip');
+  t.style.left=(event.clientX+16)+'px';
+  t.style.top=(event.clientY-10)+'px';
+}
+function hideTip(){document.getElementById('map-tip').style.opacity='0';}
+
+/* PLANNER */
+function getMatches(){
+  const pe=pStart+pLen-1;
+  return S.filter(([,,,sd])=>sd<=pe&&sd+30>=pStart);
+}
+function getWeekend(){
+  const n=new Date(),day=n.getDay(),sat=new Date(n);
+  sat.setDate(n.getDate()+(day===6?0:6-day));return dateToDoy(sat);
+}
+function setPStartBtns(mode){
+  ['today','weekend'].forEach(m=>{
+    const el=document.getElementById('pb-'+m);if(!el)return;
+    const on=m===mode;
+    el.style.background=on?'var(--gold)':'';el.style.color=on?'#08101C':'';
+    el.style.borderColor=on?'transparent':'';el.style.fontWeight=on?'500':'';
+  });
+  document.getElementById('custom-date').style.borderColor=mode==='custom'?'var(--gold)':'';
+}
+function setPLenBtns(len){
+  [3,7,14,30,60].forEach(d=>{
+    const el=document.getElementById('pl-'+d);if(!el)return;
+    const on=d===len;
+    el.style.background=on?'var(--gold)':'';el.style.color=on?'#08101C':'';
+    el.style.borderColor=on?'transparent':'';el.style.fontWeight=on?'500':'';
+  });
+}
+function setPStart(mode){
+  pMode=mode;
+  if(mode==='today')pStart=doy();
+  else if(mode==='weekend')pStart=getWeekend();
+  else if(mode==='custom'){
+    const v=document.getElementById('custom-date').value;
+    if(v)pStart=dateToDoy(new Date(v+'T12:00:00'));
+  }
+  setPStartBtns(mode);renderPlanner();
+}
+function setPLen(d){
+  pLen=d;
+  document.getElementById('len-slider').value=d;
+  document.getElementById('len-val').textContent=fmtLen(d);
+  setPLenBtns(d);renderPlanner();
+}
+function onSlider(v){
+  pLen=parseInt(v);
+  document.getElementById('len-val').textContent=fmtLen(pLen);
+  setPLenBtns(-1);renderPlanner();
+}
+
+/* MAP */
+async function initMap(){
+  try{
+    const res=await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json');
+    usTopo=await res.json();
+    buildLookup();
+    document.getElementById('map-loading').style.display='none';
+    drawMap();
+    renderPlanner();
+  } catch(e){
+    document.getElementById('map-loading').innerHTML='<span style="color:var(--text3)">Map could not be loaded — check your connection.</span>';
+  }
+}
+
+function drawMap(){
+  const wrap=document.getElementById('map-wrap');
+  const W=960,H=600;
+  mapPath=d3.geoPath(d3.geoAlbersUsa().scale(1280).translate([W/2,H/2]));
+  mapSvg=d3.select(wrap).append('svg').attr('viewBox',`0 0 ${W} ${H}`).attr('preserveAspectRatio','xMidYMid meet');
+  const features=topojson.feature(usTopo,usTopo.objects.states).features;
+
+  mapSvg.append('g').attr('id','states-g')
+    .selectAll('path').data(features).join('path')
+      .attr('class','sp')
+      .attr('d',mapPath)
+      .attr('stroke','rgba(255,255,255,0.07)')
+      .attr('stroke-width','0.6')
+      .attr('fill','#182A3A')
+      .on('mousemove',function(event,d){
+        const st=stateByName&&stateByName.get(d.properties.name);
+        if(!st)return;
+        const idx=S.indexOf(st);
+        const tip=document.getElementById('map-tip');
+        tip.innerHTML=tipHtml(st,pStart,pStart+pLen-1);
+        tip.style.left=(event.clientX+16)+'px';
+        tip.style.top=(event.clientY-10)+'px';
+        tip.style.opacity='1';
+      })
+      .on('mouseleave',function(){hideTip();})
+      .on('touchstart',function(event,d){
+        event.preventDefault();
+        const st=stateByName&&stateByName.get(d.properties.name);
+        if(!st)return;
+        const matches=getMatches(),isMatch=matches.some(m=>m[0]===d.properties.name);
+        const ov=isMatch?Math.min(st[3]+30,pStart+pLen-1)-Math.max(st[3],pStart)+1:0;
+        const tip=document.getElementById('map-tip');
+        tip.innerHTML=tipHtml(st,pStart,pStart+pLen-1);
+        const touch=event.touches[0];
+        tip.style.left=(touch.clientX+16)+'px';
+        tip.style.top=(touch.clientY-10)+'px';
+        tip.style.opacity='1';
+        setTimeout(()=>hideTip(),3000);
+      });
+
+  mapSvg.append('path').datum(topojson.mesh(usTopo,usTopo.objects.states,(a,b)=>a!==b))
+    .attr('fill','none').attr('stroke','rgba(255,255,255,0.1)').attr('stroke-width','0.7').attr('d',mapPath);
+
+  const lg=document.getElementById('map-legend');
+  lg.style.display='flex';
+  lg.innerHTML=Object.entries(RC).map(([r,c])=>
+    `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:${c};display:inline-block;opacity:.85"></span>${r}</span>`
+  ).join('')+`<span style="font-size:11px;color:var(--text3);margin-left:auto">dim = outside window</span>`;
+}
+
+function updateMapColors(matches){
+  if(!mapSvg)return;
+  const matchNames=new Set(matches.map(m=>m[0]));
+  mapSvg.selectAll('.sp').transition().duration(300)
+    .attr('fill',d=>{
+      const st=stateByName&&stateByName.get(d.properties.name);
+      if(!st)return '#182A3A';
+      return matchNames.has(d.properties.name)?RC[st[2]]+'BB':'#1C2D40';
+    })
+    .attr('opacity',d=>matchNames.has(d.properties.name)?1:0.45);
+}
+
+/* PLANNER RENDER */
+function renderPlanner(){
+  const matches=getMatches(),endDoy=pStart+pLen-1;
+  document.getElementById('plan-summary').innerHTML=
+    `<span style="color:var(--text3)">Trip:</span>
+     <span style="color:var(--gold);font-family:'DM Mono',monospace;font-size:13px">${fmt(pStart)} → ${fmt(endDoy)}</span>
+     <span style="color:var(--bd2)">·</span>
+     <span style="color:var(--text2)">${fmtLen(pLen)}</span>
+     <span style="color:var(--bd2)">·</span>
+     <strong style="color:var(--text)">${matches.length} state${matches.length!==1?'s':''}</strong>
+     <span style="color:var(--text3)">with peak spring conditions</span>`;
+  updateMapColors(matches);
+  const mt=document.getElementById('match-title');
+  const ml=document.getElementById('match-list');
+  mt.textContent=matches.length?`States in your window (${matches.length})`:'';
+  if(!matches.length){
+    ml.innerHTML='<div class="no-match">No states match this window. Try extending your trip length or picking a different start date.</div>';
+    return;
+  }
+  const sorted=[...matches].sort((a,b)=>a[3]-b[3]);
+  ml.innerHTML=`<div class="match-grid">${sorted.map(([name,,region,sd,flag,cities])=>{
+    const c=RC[region],ov=Math.min(sd+30,pStart+pLen-1)-Math.max(sd,pStart)+1,pct=Math.round(ov/30*100);
+    return `<div class="mc">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+        <span style="width:7px;height:7px;border-radius:50%;background:${c};flex-shrink:0;display:inline-block"></span>
+        <span style="font-size:13.5px;font-weight:500;color:var(--text)">${name}${flag?' '+flag:''}</span>
+      </div>
+      <div style="font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-bottom:4px">${fmt(sd)} – ${fmt(sd+30)}</div>
+      <div style="font-size:10px;color:var(--text3);line-height:1.6;margin-bottom:5px">${cities.map(([c])=>c).join(' · ')}</div>
+      <div style="height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${c};border-radius:2px;transition:width .3s"></div>
+      </div>
+      <div style="font-size:10.5px;color:${c};margin-top:3px">${ov} day${ov!==1?'s':''} overlap · ${pct}% of spring window</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* FAQ */
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const ans=item.querySelector('.faq-a');
+  const isOpen=item.classList.contains('open');
+  // close all others
+  document.querySelectorAll('.faq-item.open').forEach(el=>{
+    if(el!==item){
+      el.classList.remove('open');
+      el.querySelector('.faq-a').style.maxHeight='0';
+      el.querySelector('.ch-v').textContent='+';
+    }
+  });
+  if(isOpen){
+    item.classList.remove('open');
+    ans.style.maxHeight='0';
+    btn.querySelector('.ch-v').textContent='+';
+  } else {
+    item.classList.add('open');
+    ans.style.maxHeight=ans.scrollHeight+'px';
+    btn.querySelector('.ch-v').textContent='+';
+  }
+}
+
+/* INIT */
+buildLookup();buildToday();buildHeader();
+actBtns('r-','all',v=>v==='all'?'#8AA0B2':RC[v]);
+actBtns('s-','date',()=>'#8AA0B2');
+renderTL();
+setPStart('today');setPLen(14);
+document.getElementById('custom-date').value=new Date().toISOString().slice(0,10);
+initMap();
+let _rto;window.addEventListener('resize',()=>{clearTimeout(_rto);_rto=setTimeout(()=>{buildHeader();renderTL();},120);});
+</script>
+</body>
+</html>
