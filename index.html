@@ -323,6 +323,18 @@ footer strong{color:var(--text2);font-weight:400}
       </div></div>
     </div>
 
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How exactly are the spring windows calculated?
+        <span class="ch-v">+</span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">
+        <p>Each state's window starts with <strong>NOAA 30-year Climate Normals (1991–2020)</strong> — monthly average high and low temperatures for hundreds of US weather stations. For each of the four sampled cities, the spring window start is the approximate day when the average high first falls at or below 85 °F <em>and</em> the average overnight low enters the 50s. Because NOAA publishes monthly data, the exact day is estimated by linear interpolation between adjacent months.</p>
+        <p>The four city start days are averaged (<code>Math.round</code> of the mean) to produce the state's <code>avgDoy</code>. The window is then fixed at 30 days from that start — a standardized duration that allows all 50 states to be compared on the same scale. The Route Planner finds matches using a standard interval overlap test: a state qualifies if any part of its 30-day window falls within your trip dates. Overlap percentage is <code>overlap_days / 30</code> — the fraction of the state's peak spring captured by your trip.</p>
+        <p><a href="#methodology" onclick="openMethodology()" style="color:var(--gold);text-decoration:none;font-weight:500">Read the full methodology →</a></p>
+      </div></div>
+    </div>
+
     <div class="faq-cat">How to navigate</div>
 
     <div class="faq-item">
@@ -404,7 +416,121 @@ footer strong{color:var(--text2);font-weight:400}
   </div>
 </section>
 
+<div class="divider"></div>
+
+<section class="sec" id="methodology" style="padding-top:2.5rem;max-width:720px">
+  <div class="sec-lbl">Methodology</div>
+  <h2 class="sec-title">How the windows<br>are computed</h2>
+  <p class="sec-sub">The full data pipeline — from NOAA climate normals to the day-of-year spring window shown for each state.</p>
+  <div style="margin-top:1.5rem">
+    <button id="meth-btn" onclick="toggleMethodology()" style="width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--bd2);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13.5px;padding:13px 18px;border-radius:10px;cursor:pointer;transition:background .2s;text-align:left">
+      <span>Read the full methodology</span>
+      <span id="meth-ch" style="font-size:20px;color:var(--text3);transition:transform .25s;transform-origin:center;display:inline-block">+</span>
+    </button>
+    <div id="meth-body" style="max-height:0;overflow:hidden;transition:max-height .5s ease">
+      <div style="background:var(--bg1);border:1px solid var(--bd2);border-top:none;border-bottom-left-radius:10px;border-bottom-right-radius:10px;padding:1.75rem 1.75rem 2rem;font-size:13.5px;color:var(--text2);font-weight:300;line-height:1.85">
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:0 0 .6rem">1. The spring benchmark</h3>
+        <p style="margin-bottom:.75rem">The target condition is defined as <strong style="color:var(--text);font-weight:500">average daytime high ≤ 85 °F and average overnight low in the 50s °F (50–59 °F)</strong>. These thresholds were chosen to match what April in North Carolina feels like — warm enough to be outdoors comfortably all day, cool enough at night to sleep with the windows open. North Carolina is the reference state (marked ★) and its window (approximately March 31 – April 30, averaging Charlotte, Raleigh, Asheville, and Wilmington) anchors the benchmark.</p>
+        <p style="margin-bottom:.75rem">The 85 °F high ceiling marks the onset of oppressive summer heat in most of the country. The 50s low criterion captures the "crisp evening" quality of true spring — cool enough to feel seasonal, but not cold enough to require heavy gear overnight.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">2. Data source</h3>
+        <p style="margin-bottom:.75rem">All temperature data comes from the <strong style="color:var(--text);font-weight:500">NOAA U.S. Climate Normals (1991–2020)</strong>, published by the National Centers for Environmental Information (NCEI). These normals report monthly average maximum and minimum temperatures for hundreds of weather stations across the United States. A 30-year period dampens single-year anomalies and provides a stable long-term baseline — these figures represent what a location <em>typically</em> experiences in a given month, averaged over a generation of measurements. The 1991–2020 period is the current official normal, updated every decade.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">3. Translating monthly normals to a start day</h3>
+        <p style="margin-bottom:.6rem">NOAA normals are reported by month, not by day. Converting to a specific day-of-year start involves three steps:</p>
+        <p style="margin-bottom:.35rem;color:var(--text);font-weight:400;font-size:13px">Step 1 — Identify the threshold month</p>
+        <p style="margin-bottom:.75rem">Scan monthly average highs and lows to find the first month where the high is at or below 85 °F <em>and</em> the overnight low has entered the 50s. The month-pair that brackets the transition (e.g. March still below threshold, April above) defines the target zone.</p>
+        <p style="margin-bottom:.35rem;color:var(--text);font-weight:400;font-size:13px">Step 2 — Interpolate to a day within the month</p>
+        <p style="margin-bottom:.5rem">Monthly averages represent the midpoint of that month. Linear interpolation between adjacent months' midpoints estimates the specific day:</p>
+        <pre style="background:var(--bg3);border:1px solid var(--bd);padding:10px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);overflow-x:auto;margin:.5rem 0 .75rem;line-height:1.65">frac      = (threshold − prev_month_avg) / (next_month_avg − prev_month_avg)
+start_day = mid_of_prev_month + frac × days_between_midpoints</pre>
+        <p style="margin-bottom:.75rem">This yields a fractional day-of-year, rounded to the nearest integer to produce <code style="font-family:'DM Mono',monospace;font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:3px">startDoy</code> for that city. Example — Charlotte, NC: March avg high ≈ 64 °F, avg low ≈ 44 °F (low not yet in 50s); April avg high ≈ 74 °F, avg low ≈ 54 °F (both criteria met). Interpolation places the crossing around March 31, giving Charlotte <code style="font-family:'DM Mono',monospace;font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:3px">startDoy = 91</code>.</p>
+        <p style="margin-bottom:.35rem;color:var(--text);font-weight:400;font-size:13px">Step 3 — Use the later of the two threshold crossings</p>
+        <p style="margin-bottom:.75rem">The start day is the <em>later</em> of when the high crosses below 85 °F and when the low crosses above 50 °F. In practice the low criterion typically lags by days to a couple of weeks, making it the binding constraint in most states.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">4. The 30-day window</h3>
+        <p style="margin-bottom:.75rem">Each city's spring window is fixed at <strong style="color:var(--text);font-weight:500">30 days starting from <code style="font-family:'DM Mono',monospace;font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:3px">startDoy</code></strong>, spanning [startDoy, startDoy + 30] inclusive. This standardized duration enables visual comparison across states — it is not a precise forecast of exactly when conditions shift. In reality some states hold ideal conditions for 5–7 weeks; others (desert states) have a narrower window before heat arrives.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">5. City selection</h3>
+        <p style="margin-bottom:.75rem">A single city per state can misrepresent the whole — Seattle (coastal, maritime) reaches spring conditions nearly three weeks later than Spokane (inland, continental), both in Washington. To capture intrastate variation, <strong style="color:var(--text);font-weight:500">four cities are selected per state</strong>, representing distinct climate zones or geographic quadrants: typically N/S/E/W, or coastal vs. inland, valley vs. mountain.</p>
+        <div style="overflow-x:auto;margin:.5rem 0 .75rem">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr style="border-bottom:1px solid var(--bd2)">
+              <th style="text-align:left;padding:6px 16px 6px 0;color:var(--text3);font-weight:500;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap">Principle</th>
+              <th style="text-align:left;padding:6px 0;color:var(--text3);font-weight:500;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase">Example</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:7px 16px 7px 0;color:var(--text2);white-space:nowrap;vertical-align:top">N/S/E/W spread</td><td style="padding:7px 0;color:var(--text2)">Iowa: Des Moines (central), Sioux City (NW), Cedar Rapids (NE), Dubuque (NE elevated)</td></tr>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:7px 16px 7px 0;color:var(--text2);white-space:nowrap;vertical-align:top">Coastal vs. inland</td><td style="padding:7px 0;color:var(--text2)">California: San Diego (coast), Sacramento (inland valley), San Francisco (fog coast), Los Angeles (coastal basin)</td></tr>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:7px 16px 7px 0;color:var(--text2);white-space:nowrap;vertical-align:top">Valley vs. mountain</td><td style="padding:7px 0;color:var(--text2)">Colorado: Denver (Front Range), Colorado Springs (piedmont), Grand Junction (western slope), Pueblo (southern plains)</td></tr>
+              <tr><td style="padding:7px 16px 7px 0;color:var(--text2);white-space:nowrap;vertical-align:top">Climate zone diversity</td><td style="padding:7px 0;color:var(--text2)">Washington: Seattle (maritime), Spokane (inland), Yakima (rain shadow), Olympia (Puget lowlands)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">6. State-level averaging</h3>
+        <p style="margin-bottom:.5rem">The state's <code style="font-family:'DM Mono',monospace;font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:3px">avgDoy</code> is the arithmetic mean of the four city start days, rounded to the nearest integer:</p>
+        <pre style="background:var(--bg3);border:1px solid var(--bd);padding:10px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);overflow-x:auto;margin:.5rem 0 .75rem;line-height:1.65">avgDoy = Math.round((city1 + city2 + city3 + city4) / 4)</pre>
+        <p style="margin-bottom:.5rem">Example — North Carolina (★ reference state):</p>
+        <div style="overflow-x:auto;margin:.5rem 0 .5rem">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr style="border-bottom:1px solid var(--bd2)">
+              <th style="text-align:left;padding:6px 16px 6px 0;color:var(--text3);font-weight:500;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase">City</th>
+              <th style="text-align:right;padding:6px 16px 6px 0;color:var(--text3);font-weight:500;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase">startDoy</th>
+              <th style="text-align:left;padding:6px 0;color:var(--text3);font-weight:500;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase">Date</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:6px 16px 6px 0;color:var(--text2)">Charlotte</td><td style="padding:6px 16px 6px 0;color:var(--text2);font-family:'DM Mono',monospace;text-align:right">91</td><td style="padding:6px 0;color:var(--text2)">Apr 1</td></tr>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:6px 16px 6px 0;color:var(--text2)">Raleigh</td><td style="padding:6px 16px 6px 0;color:var(--text2);font-family:'DM Mono',monospace;text-align:right">88</td><td style="padding:6px 0;color:var(--text2)">Mar 29</td></tr>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:6px 16px 6px 0;color:var(--text2)">Asheville</td><td style="padding:6px 16px 6px 0;color:var(--text2);font-family:'DM Mono',monospace;text-align:right">100</td><td style="padding:6px 0;color:var(--text2)">Apr 10</td></tr>
+              <tr style="border-bottom:1px solid var(--bd)"><td style="padding:6px 16px 6px 0;color:var(--text2)">Wilmington</td><td style="padding:6px 16px 6px 0;color:var(--text2);font-family:'DM Mono',monospace;text-align:right">82</td><td style="padding:6px 0;color:var(--text2)">Mar 23</td></tr>
+              <tr><td style="padding:6px 16px 6px 0;color:var(--text);font-weight:500">State average</td><td style="padding:6px 16px 6px 0;color:var(--gold);font-family:'DM Mono',monospace;text-align:right;font-weight:500">90</td><td style="padding:6px 0;color:var(--text);font-weight:500">Mar 31</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-bottom:.75rem;font-size:12px;color:var(--text3)">Math.round(90.25) = 90. Displayed window: Mar 31 – Apr 30.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">7. Day-of-year convention</h3>
+        <p style="margin-bottom:.5rem">The tool uses a <strong style="color:var(--text);font-weight:500">day-of-year integer</strong> throughout: January 1 = 1, December 31 = 365. Today's DOY is computed from the system clock:</p>
+        <pre style="background:var(--bg3);border:1px solid var(--bd);padding:10px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);overflow-x:auto;margin:.5rem 0 .75rem;line-height:1.65">function doy() {
+  const n = new Date(), s = new Date(n.getFullYear(), 0, 0);
+  return Math.floor((n - s) / 86400000);
+}</pre>
+        <p style="margin-bottom:.75rem"><code style="font-family:'DM Mono',monospace;font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:3px">fmt(d)</code> converts a DOY integer to a human-readable date (e.g. <code style="font-family:'DM Mono',monospace;font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:3px">fmt(90) → "Mar 31"</code>) by constructing a Date anchored to January 2025 (a non-leap year). The ±1 day discrepancy in leap years is negligible for planning purposes.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">8. Route Planner overlap logic</h3>
+        <p style="margin-bottom:.5rem">A state qualifies as a match if its spring window overlaps at all with the user's trip — standard interval intersection:</p>
+        <pre style="background:var(--bg3);border:1px solid var(--bd);padding:10px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);overflow-x:auto;margin:.5rem 0 .75rem;line-height:1.65">// state: [sd, sd+30]   trip: [pStart, pStart+pLen-1]
+qualifies if: sd &lt;= (pStart+pLen-1) &amp;&amp; (sd+30) &gt;= pStart</pre>
+        <p style="margin-bottom:.5rem">The number of overlapping days and the percentage shown in each match card:</p>
+        <pre style="background:var(--bg3);border:1px solid var(--bd);padding:10px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);overflow-x:auto;margin:.5rem 0 .75rem;line-height:1.65">overlapDays = Math.min(sd+30, pStart+pLen-1) - Math.max(sd, pStart) + 1
+pct         = Math.round(overlapDays / 30 * 100)</pre>
+        <p style="margin-bottom:.75rem">The +1 makes both endpoints inclusive. The percentage is what fraction of the state's 30-day peak spring the trip captures.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">9. State-specific caveats</h3>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Hawaii ⚠</strong> — Sea-level overnight lows stay in the mid-60s year-round. The 50–59 °F low criterion is never strictly met at typical elevations. Window is included based on the high criterion alone.</p>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Alaska ⚠</strong> — Computed for Anchorage, Juneau, Kodiak, and Fairbanks. The Fairbanks interior doesn't reliably reach 50 °F overnight. Latest window of all 50 states (~day 152, early June).</p>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Arizona</strong> — Largest intrastate spread: Phoenix (day 46, mid-Feb) vs. Flagstaff (day 121, May 1) differ by 75 days due to elevation. The four-city average (day 64, early March) accurately describes no single part of the state.</p>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">North Carolina ★</strong> — The reference benchmark state. Its window was used to define the spring conditions criterion.</p>
+        <p style="margin-bottom:.75rem"><strong style="color:var(--text);font-weight:500">Washington</strong> — Seattle (day 145) and Spokane (day 130) differ by 15 days due to the Olympic rain shadow and contrasting maritime vs. continental climates.</p>
+
+        <h3 style="font-size:13.5px;font-weight:500;color:var(--text);margin:1.75rem 0 .6rem">10. Limitations</h3>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Averages, not forecasts.</strong> Any given year may deviate 1–3 weeks due to El Niño, La Niña, or other interannual variability. Always verify with a live forecast before departure.</p>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Elevation is undersampled.</strong> A mountain pass at 3,500 m may be 3–4 weeks behind city averages. Check road conditions separately for high-elevation routes.</p>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Interpolation error.</strong> Converting monthly normals to a start day introduces ±3–10 day error depending on the city's temperature curve shape.</p>
+        <p style="margin-bottom:.4rem"><strong style="color:var(--text);font-weight:500">Climate change.</strong> The 1991–2020 normals reflect ongoing warming trends. Windows are trending 1–2 weeks earlier than the prior 1981–2010 normals and this shift is continuing.</p>
+        <p style="margin-bottom:0"><strong style="color:var(--text);font-weight:500">Fixed 30-day window.</strong> Some states hold ideal conditions for 5–7 weeks; others have a narrower window. The standardized 30-day duration enables comparison but can overstate or understate local reality.</p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
+  <div style="margin-bottom:1.1rem">
+    <a href="#methodology" onclick="openMethodology()" style="color:var(--text3);text-decoration:none;font-size:12.5px;font-weight:300;transition:color .2s" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Full methodology →</a>
+  </div>
   <div>Windows computed from <strong>4-city NOAA 30-year climate normal averages</strong> per state.</div>
   <div>Elevation, coastal proximity, and sub-regional variation still apply within each state.</div>
   <div style="margin-top:.35rem;font-size:11px;opacity:.6">Always verify current forecasts before travel. Spring Chase is a planning aid, not a weather guarantee.</div>
@@ -791,6 +917,36 @@ function renderPlanner(){
       <div style="font-size:10.5px;color:${c};margin-top:3px">${ov} day${ov!==1?'s':''} overlap · ${pct}% of spring window</div>
     </div>`;
   }).join('')}</div>`;
+}
+
+/* METHODOLOGY */
+function toggleMethodology(){
+  const body=document.getElementById('meth-body');
+  const ch=document.getElementById('meth-ch');
+  const btn=document.getElementById('meth-btn');
+  const isOpen=body.style.maxHeight&&body.style.maxHeight!=='0px';
+  if(isOpen){
+    body.style.maxHeight='0';
+    ch.style.transform='';
+    btn.style.borderBottomLeftRadius='10px';
+    btn.style.borderBottomRightRadius='10px';
+  } else {
+    body.style.maxHeight=body.scrollHeight+'px';
+    ch.style.transform='rotate(45deg)';
+    btn.style.borderBottomLeftRadius='0';
+    btn.style.borderBottomRightRadius='0';
+  }
+}
+function openMethodology(){
+  const body=document.getElementById('meth-body');
+  const ch=document.getElementById('meth-ch');
+  const btn=document.getElementById('meth-btn');
+  if(!body.style.maxHeight||body.style.maxHeight==='0px'){
+    body.style.maxHeight=body.scrollHeight+'px';
+    ch.style.transform='rotate(45deg)';
+    btn.style.borderBottomLeftRadius='0';
+    btn.style.borderBottomRightRadius='0';
+  }
 }
 
 /* FAQ */
